@@ -1,102 +1,81 @@
-import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
-import styles from "./page.module.css";
+import { ThemeToggle } from '@repo/brand';
 
-type Props = Omit<ImageProps, "src"> & {
-  srcLight: string;
-  srcDark: string;
-};
+const highlights = [
+  {
+    title: 'Connected TV for Africa',
+    copy: 'Deliver measurement-ready campaigns with real-time data, offline-first delivery, and transparent pricing modeled after the live platform.',
+  },
+  {
+    title: 'Consistent tokens',
+    copy: 'Shared colors, spacing, typography, and animations keep every experience aligned with the same design system.',
+  },
+  {
+    title: 'Built for scale',
+    copy: 'Turborepo caches, parallel pipelines, and a single Tailwind preset make it easy for every team to ship confidently.',
+  },
+];
 
-const ThemeImage = (props: Props) => {
-  const { srcLight, srcDark, ...rest } = props;
-
-  return (
-    <>
-      <Image {...rest} src={srcLight} className="imgLight" />
-      <Image {...rest} src={srcDark} className="imgDark" />
-    </>
-  );
-};
+const stats = [
+  { label: 'Markets', value: '12' },
+  { label: 'Media owners', value: '4,320' },
+  { label: 'Campaigns', value: '2,100+' },
+];
 
 export default function Home() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <ThemeImage
-          className={styles.logo}
-          srcLight="turborepo-dark.svg"
-          srcDark="turborepo-light.svg"
-          alt="Turborepo logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>apps/web/app/page.tsx</code>
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen bg-background text-foreground">
+      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-16 md:px-6">
+        <header className="flex flex-col gap-6 rounded-2xl border border-border bg-card/60 p-8 shadow-card backdrop-blur">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="text-sm uppercase tracking-[0.4em] text-muted-foreground">Brand system</p>
+              <h1 className="mt-2 text-4xl font-display font-bold leading-tight tracking-tight text-foreground md:text-5xl">
+                Turborepo-ready platform template
+              </h1>
+              <p className="mt-4 max-w-2xl text-base text-muted-foreground">
+                Everything in this template now extends the shared Tailwind preset, imports the same CSS variables,
+                and reuses the theme utilities that power the flagship ads-management web experience.
+              </p>
+            </div>
+            <ThemeToggle />
+          </div>
+          <div className="grid gap-6 text-center sm:grid-cols-3">
+            {stats.map((stat) => (
+              <div key={stat.label}>
+                <p className="text-3xl font-semibold text-foreground">{stat.value}</p>
+                <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </header>
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new/clone?demo-description=Learn+to+implement+a+monorepo+with+a+two+Next.js+sites+that+has+installed+three+local+packages.&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4K8ZISWAzJ8X1504ca0zmC%2F0b21a1c6246add355e55816278ef54bc%2FBasic.png&demo-title=Monorepo+with+Turborepo&demo-url=https%3A%2F%2Fexamples-basic-web.vercel.sh%2F&from=templates&project-name=Monorepo+with+Turborepo&repository-name=monorepo-turborepo&repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fturborepo%2Ftree%2Fmain%2Fexamples%2Fbasic&root-directory=apps%2Fdocs&skippable-integrations=1&teamSlug=vercel&utm_source=create-turbo"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://turborepo.com/docs?utm_source"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com/templates?search=turborepo&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://turborepo.com?utm_source=create-turbo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to turborepo.com →
-        </a>
-      </footer>
-    </div>
+        <section className="grid gap-6 md:grid-cols-3">
+          {highlights.map((item) => (
+            <article
+              key={item.title}
+              className="flex flex-col gap-3 rounded-xl border border-border bg-card p-6 shadow-dropdown transition hover:-translate-y-0.5 hover:shadow-card"
+            >
+              <h2 className="text-xl font-semibold text-foreground">{item.title}</h2>
+              <p className="text-sm leading-relaxed text-muted-foreground">{item.copy}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-gradient-to-r from-primary/20 to-accent/20 p-6 shadow-md">
+          <div>
+            <p className="text-xs uppercase tracking-[0.4em] text-foreground/70">Next steps</p>
+            <p className="text-2xl font-semibold text-foreground">Import the brand package and ship in other apps.</p>
+          </div>
+          <div className="flex gap-3">
+            <button className="rounded-full border border-foreground/30 px-4 py-2 text-sm font-semibold text-foreground transition hover:border-foreground hover:bg-foreground/5">
+              View docs
+            </button>
+            <button className="rounded-full bg-foreground/90 px-4 py-2 text-sm font-semibold text-background transition hover:bg-foreground">
+              Launch experience
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }

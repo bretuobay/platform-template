@@ -1,0 +1,215 @@
+# Turborepo Monorepo - AI Coding Rules
+
+## Project Context
+- **Architecture:** Bulletproof React with vertically sliced feature packages in Turborepo
+- **Node Version:** Always use Node 20+ (preferably 23.x)
+- **Full Docs:** See `AI_INSTRUCTIONS.md` and `base-repo-architecture.md`
+
+## Critical Rules
+
+### 1. Import Discipline
+- ✅ ONLY import from barrel exports: `import { X } from "@repo/package"`
+- ❌ NEVER deep import: `import { X } from "@repo/package/src/internal"`
+- All packages expose public API via `src/index.ts` barrel export
+
+### 2. Package Boundaries
+```
+✅ apps → packages (allowed)
+✅ packages → shared packages (ui, utils, entities, validation, api-client)
+❌ apps → apps (forbidden)
+❌ feature-* → feature-* (forbidden)
+❌ workers → React packages (forbidden)
+```
+
+### 3. Edge-Safe Code (Workers)
+- ✅ Use: Fetch API, Web Streams, URL, crypto.subtle, Hono, Zod
+- ❌ Never: Node.js APIs (fs, path, crypto module, buffer)
+- Workers can only import: @repo/entities, @repo/validation, @repo/utils, @repo/config
+
+### 4. TypeScript Strict Mode
+- Always enable strict mode
+- No `any` types
+- Use TypeScript project references
+- Path aliases in `tsconfig.base.json`
+
+## Directory Structure
+
+```
+apps/               # Deployable apps (web, web-admin, landing, edge-*)
+packages/
+├─ feature-*/      # Vertical slices (api, components, hooks, model, services)
+├─ ui/             # Design system
+├─ entities/       # Domain models
+├─ validation/     # Zod schemas
+├─ utils/          # Pure functions
+├─ api-client/     # HTTP + SWR wrappers
+└─ config/         # Runtime config
+```
+
+## Feature Package Structure (Bulletproof React)
+
+```
+packages/feature-example/
+├─ src/
+│  ├─ api/              # SWR hooks, typed fetchers
+│  ├─ components/       # Feature UI components
+│  ├─ hooks/            # Custom hooks
+│  ├─ model/            # Types, schemas, mappers
+│  ├─ services/         # Pure business logic (no React)
+│  ├─ index.ts          # PUBLIC API - barrel export
+│  └─ __tests__/        # Unit tests
+├─ package.json         # "@repo/feature-example"
+└─ tsconfig.json
+```
+
+## Code Style
+
+### Components
+- Tailwind CSS with design system tokens
+- Dark mode via CSS variables: `var(--color-bg)`, `var(--color-text-primary)`
+- Mobile-first (320px+), 44x44px touch targets
+- ARIA labels, semantic HTML
+- Headless, composable patterns
+
+### Data Fetching
+- Use SWR wrapper from `@repo/api-client`
+- Notifications via app-provided adapter (not direct library import)
+- Server state over client state
+
+### Testing
+- **High priority:** Utils, services, validation schemas
+- **Low priority:** UI components (only if complex logic)
+- Vitest for all tests
+- Happy path + 1-2 edge cases (no exhaustive coverage)
+
+## Templates
+
+### Feature package.json
+```json
+{
+  "name": "@repo/feature-{name}",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": "./dist/index.js" },
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b -w",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "dependencies": {
+    "@repo/ui": "workspace:*",
+    "@repo/utils": "workspace:*"
+  }
+}
+```
+
+### Barrel Export (src/index.ts)
+```ts
+// Only export public API
+export * from "./components/ExampleComponent";
+export * from "./hooks/useExample";
+export * from "./model/types";
+// Keep api/, services/ internal
+```
+
+### Worker Route (Hono)
+```ts
+import { Hono } from "hono";
+import { ExampleSchema } from "@repo/validation";
+
+const app = new Hono<{ Bindings: Env }>();
+
+app.post("/api/example", async (c) => {
+  const result = ExampleSchema.safeParse(await c.req.json());
+  if (!result.success) {
+    return c.json({ error: result.error.issues }, 400);
+  }
+  // Use c.env.DB, c.env.KV for Cloudflare bindings
+  return c.json({ success: true }, 200);
+});
+```
+
+### SWR Hook
+```ts
+import { useServerState } from "@repo/api-client";
+import { notify } from "@app/notify"; // App adapter
+
+export function useExample() {
+  return useServerState({
+    key: ["example"],
+    fetcher: async (signal) => {
+      const res = await fetch("/api/example", { signal });
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    onSuccess: () => notify.success("Loaded"),
+    onError: () => notify.error("Failed"),
+  });
+}
+```
+
+## Common Commands
+
+```bash
+npm run dev                # Start all apps
+npm run build              # Build all packages
+npm run typecheck          # Type check all
+npm run test               # Run all tests
+
+# Add dependency to specific package
+npm install <pkg> --workspace=packages/feature-example
+
+# Add path alias
+# Edit tsconfig.base.json:
+# "@repo/feature-{name}": ["packages/feature-{name}/src/index.ts"]
+```
+
+## Checklist Before Committing
+
+- [ ] Only barrel exports used (no deep imports)
+- [ ] TypeScript strict mode passes
+- [ ] Tests for utils/services added
+- [ ] No Node.js APIs in worker code
+- [ ] Design system tokens used (not hardcoded colors)
+- [ ] Mobile responsive (320px+)
+- [ ] Dark mode support
+- [ ] Accessibility (ARIA, semantic HTML)
+- [ ] `npm run build` succeeds
+- [ ] `npm run typecheck` passes
+
+## Common Mistakes
+
+❌ Deep imports: `import X from "@repo/ui/src/Button"`
+✅ Barrel imports: `import { Button } from "@repo/ui"`
+
+❌ Cross-feature deps: `import { useAuth } from "@repo/feature-auth"` in feature-profile
+✅ Share via entities: `import { User } from "@repo/entities"`
+
+❌ Node APIs in workers: `import fs from "fs"`
+✅ Web standards: `await crypto.subtle.digest(...)`
+
+❌ Hardcoded colors: `bg-black text-white`
+✅ Design tokens: `bg-background text-textPrimary`
+
+## AI Agent Behavior
+
+1. **Read first:** Check existing similar packages before creating new ones
+2. **Match patterns:** Follow exact structure and style of similar code
+3. **No over-engineering:** Keep complexity minimal, match existing level
+4. **Test utils:** Always test utility functions and services
+5. **Skip UI tests:** Unless component has complex logic
+6. **Document exports:** Add JSDoc to public APIs
+7. **Verify imports:** Ensure all imports use barrel exports only
+8. **Edge-safe check:** Verify workers don't use Node.js APIs
+
+## Reference
+
+For detailed patterns, examples, and architecture decisions, see:
+- `AI_INSTRUCTIONS.md` - Complete AI agent guide
+- `base-repo-architecture.md` - Detailed architecture documentation

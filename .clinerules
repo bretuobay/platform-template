@@ -1,0 +1,163 @@
+# Claude Code AI Rules
+
+## Quick Reference
+- Full guide: `AI_INSTRUCTIONS.md`
+- Architecture: `base-repo-architecture.md`
+- Node version: 23.x (`nvm use 23`)
+
+## Core Principles
+1. **Vertical slicing:** Features are self-contained packages
+2. **Barrel exports only:** No deep imports ever
+3. **Edge-first:** Web standard APIs (Fetch, URL, crypto.subtle)
+4. **TypeScript strict:** No `any` types
+5. **Minimal testing:** Focus on utils/services, not UI
+
+## Package Structure
+```
+apps/          → web, web-admin, landing, edge-*
+packages/
+├─ feature-*/ → api, components, hooks, model, services
+├─ ui/        → Design system
+├─ utils/     → Pure functions (MUST TEST)
+├─ entities/  → Domain models
+├─ validation/→ Zod schemas
+└─ api-client/→ SWR wrappers
+```
+
+## Import Rules
+```ts
+// ✅ ONLY THIS
+import { Button } from "@repo/ui"
+import { useAuth } from "@repo/feature-auth"
+
+// ❌ NEVER THIS
+import { Button } from "@repo/ui/src/components/Button"
+import UserCard from "@repo/feature-users/src/components/UserCard"
+```
+
+## Boundary Rules
+- ✅ Apps → Packages
+- ✅ Features → Shared (ui, utils, entities, validation, api-client)
+- ❌ Apps → Apps
+- ❌ Features → Features
+- ❌ Workers → React packages
+
+## Worker Code (Edge)
+```ts
+// ✅ Allowed
+fetch(), new URL(), crypto.subtle, Hono, Zod
+@repo/validation, @repo/entities, @repo/utils
+
+// ❌ Forbidden
+fs, path, crypto (Node module), any React
+```
+
+## Task Approach
+1. Use TodoWrite for multi-step tasks
+2. Read similar existing packages first (Glob/Read)
+3. Match patterns exactly
+4. Verify barrel exports only
+5. Test utils and services
+6. Skip UI tests unless complex logic
+
+## Templates
+
+### Creating Feature Package
+```bash
+# 1. Structure
+mkdir -p packages/feature-{name}/src/{api,components,hooks,model,services,__tests__}
+
+# 2. package.json
+{
+  "name": "@repo/feature-{name}",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": { ".": "./dist/index.js" },
+  "scripts": { "build": "tsc -b", "dev": "tsc -b -w" },
+  "peerDependencies": { "react": "^18" }
+}
+
+# 3. src/index.ts (barrel)
+export * from "./components/X"
+export * from "./hooks/useY"
+
+# 4. Add to tsconfig.base.json paths
+"@repo/feature-{name}": ["packages/feature-{name}/src/index.ts"]
+```
+
+### SWR Hook Pattern
+```ts
+import { useServerState } from "@repo/api-client"
+import { notify } from "@app/notify" // App adapter
+
+export function useData() {
+  return useServerState({
+    key: ["data"],
+    fetcher: async (signal) => {
+      const res = await fetch("/api/data", { signal })
+      if (!res.ok) throw new Error("Failed")
+      return res.json()
+    },
+    onSuccess: () => notify.success("Loaded"),
+    onError: () => notify.error("Failed")
+  })
+}
+```
+
+### Worker Route (Hono)
+```ts
+import { Hono } from "hono"
+import { Schema } from "@repo/validation"
+
+const app = new Hono<{ Bindings: Env }>()
+
+app.post("/api/resource", async (c) => {
+  const result = Schema.safeParse(await c.req.json())
+  if (!result.success) return c.json({ error: result.error }, 400)
+
+  // Use c.env.DB, c.env.KV
+  return c.json({ success: true }, 200)
+})
+```
+
+## UI Standards
+- Tailwind with design tokens: `bg-background`, `text-textPrimary`
+- Dark mode: CSS variables `var(--color-bg)`
+- Mobile-first: 320px+
+- Touch targets: 44x44px minimum
+- Accessibility: ARIA, semantic HTML
+
+## Testing
+```ts
+// packages/utils/src/__tests__/fn.test.ts
+import { describe, it, expect } from "vitest"
+import { fn } from "../fn"
+
+describe("fn", () => {
+  it("happy path", () => expect(fn("input")).toBe("output"))
+  it("edge case", () => expect(() => fn(null)).toThrow())
+})
+```
+
+## Commands
+```bash
+npm run dev              # All apps
+npm run build            # All packages
+npm run typecheck        # Type check
+npm run test             # Run tests
+npm install <pkg> -w packages/feature-x  # Add dependency
+```
+
+## Before Any Code
+- [ ] Read existing similar code
+- [ ] Verify Node 20+
+- [ ] Check barrel export rules
+- [ ] Understand package type (feature vs shared vs worker)
+
+## Definition of Done
+- [ ] Barrel exports only
+- [ ] TypeScript strict passes
+- [ ] Tests for utils/services
+- [ ] No Node.js APIs in workers
+- [ ] Build succeeds
+- [ ] Matches existing patterns

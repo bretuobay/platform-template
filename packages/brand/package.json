@@ -1,0 +1,58 @@
+{
+  "name": "@repo/brand",
+  "version": "0.1.0",
+  "description": "Shared branding tokens, tailwind preset, and theme utilities for the platform template apps.",
+  "type": "module",
+  "author": "Platform Template Team",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tailwind-preset": {
+      "types": "./dist/tailwind/preset.d.ts",
+      "default": "./dist/tailwind/preset.js"
+    },
+    "./styles.css": "./src/styles/globals.css"
+  },
+  "files": ["dist", "src/styles/globals.css", "README.md"],
+  "sideEffects": ["./src/styles/globals.css"],
+  "scripts": {
+    "build": "tsup --tsconfig tsconfig.json src/index.ts src/tailwind/preset.ts --format esm,cjs --dts --out-dir dist --clean",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "test": "echo \"No tests\"",
+    "clean": "rimraf dist"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
+  },
+  "peerDependencies": {
+    "@tailwindcss/typography": "^0.5.9",
+    "autoprefixer": "^10.4.20",
+    "next": ">=16",
+    "next-themes": "^0.2.1",
+    "postcss": "^8.4.36",
+    "react": ">=18",
+    "tailwindcss": "^3.4.0"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.2.2",
+    "@tailwindcss/typography": "^0.5.9",
+    "autoprefixer": "^10.4.20",
+    "next-themes": "^0.2.1",
+    "postcss": "^8.4.36",
+    "tailwindcss": "^3.4.0",
+    "eslint": "^9.39.1",
+    "rimraf": "^5.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
