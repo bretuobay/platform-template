@@ -4,25 +4,25 @@ const footerColumns = [
   {
     title: 'Product',
     links: [
-      { label: 'Overview', href: '#overview' },
-      { label: 'Integrations', href: '#solutions' },
-      { label: 'API docs', href: '#resources' },
+      { label: 'Overview', href: '#product' },
+      { label: 'Solutions', href: '#solutions' },
+      { label: 'Pricing', href: '#pricing' },
     ],
   },
   {
-    title: 'Resources',
+    title: 'Developers',
     links: [
-      { label: 'Blog', href: '#resources' },
-      { label: 'Case studies', href: '#overview' },
-      { label: 'Support', href: '#pricing' },
+      { label: 'Architecture', href: '/docs' },
+      { label: 'Package guide', href: '/docs' },
+      { label: 'API starter', href: '/docs' },
     ],
   },
   {
     title: 'Company',
     links: [
-      { label: 'About', href: '#solutions' },
-      { label: 'Careers', href: '#resources' },
-      { label: 'Contact', href: '#pricing' },
+      { label: 'About', href: '#resources' },
+      { label: 'Support', href: '#resources' },
+      { label: 'Contact', href: '#resources' },
     ],
   },
 ];
@@ -31,39 +31,45 @@ export function MarketingFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-card/70">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10 md:flex-row md:items-start">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.5em] text-muted-foreground">Connected SaaS</p>
-          <p className="text-lg font-semibold text-foreground">Platform Template</p>
-          <p className="text-sm text-muted-foreground">
-            Built for teams that ship with shared tokens, consistent styling, and a mobile-first marketing plus app surface.
+    <footer className="mt-8 border-t border-border/70 bg-background/70 pt-16 pb-10 text-text-secondary">
+      <div className="brand-container grid gap-14 pb-14 lg:grid-cols-[1.4fr_2fr]">
+        <div className="space-y-5">
+          <p className="text-2xl font-black tracking-tight text-text-primary">
+            Platform <span className="text-primary">Template</span>
+          </p>
+          <p className="max-w-sm text-base leading-relaxed text-text-secondary">
+            Production-ready starter for web and edge APIs with reusable feature packages and token-first styling.
           </p>
         </div>
 
-        <div className="grid flex-1 grid-cols-2 gap-6 md:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-3">
           {footerColumns.map((column) => (
-            <div key={column.title} className="space-y-2 text-sm">
-              <p className="text-[0.6rem] font-semibold uppercase tracking-[0.4em] text-muted-foreground">
-                {column.title}
-              </p>
-              <div className="flex flex-col gap-1">
+            <div key={column.title} className="space-y-5">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-secondary/75">{column.title}</p>
+              <ul className="space-y-3 text-sm text-text-secondary">
                 {column.links.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-muted-foreground transition hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
+                  <li key={link.label}>
+                    <Link href={link.href} className="transition-colors hover:text-primary">
+                      {link.label}
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ))}
         </div>
       </div>
-      <div className="border-t border-border px-4 py-4 text-[0.55rem] uppercase tracking-[0.4em] text-muted-foreground md:px-6">
-        <p>&copy; {year} Platform Template. All rights reserved.</p>
+
+      <div className="brand-container flex flex-col gap-4 border-t border-border/70 pt-8 text-sm text-text-secondary sm:flex-row sm:items-center sm:justify-between">
+        <p>(c) {year} Platform Template. Built for fast multi-product delivery.</p>
+        <div className="flex flex-wrap items-center gap-4">
+          <Link href="/docs" className="transition-colors hover:text-primary">
+            Documentation
+          </Link>
+          <Link href="/dashboard" className="transition-colors hover:text-primary">
+            Dashboard starter
+          </Link>
+        </div>
       </div>
     </footer>
   );

@@ -1,22 +1,38 @@
-export const navLinks = [
+export interface AppNavLink {
+  label: string;
+  description: string;
+  href: string;
+  icon: 'overview' | 'activity' | 'insights' | 'settings';
+  showInMobileBar?: boolean;
+}
+
+export const navLinks: AppNavLink[] = [
   {
     label: 'Overview',
     description: 'Live health and stats',
-    href: '#overview',
+    href: '/dashboard#overview',
+    icon: 'overview',
+    showInMobileBar: true,
   },
   {
     label: 'Activity',
     description: 'Recent workspace updates',
-    href: '#activity',
+    href: '/dashboard#activity',
+    icon: 'activity',
+    showInMobileBar: true,
   },
   {
     label: 'Insights',
-    description: 'Analytics & reporting',
-    href: '#insights',
+    description: 'Analytics and reporting',
+    href: '/dashboard#insights',
+    icon: 'insights',
+    showInMobileBar: true,
   },
   {
     label: 'Settings',
-    description: 'Team & billing',
-    href: '#settings',
+    description: 'Team and billing',
+    href: '/dashboard#settings',
+    icon: 'settings',
+    showInMobileBar: true,
   },
 ];

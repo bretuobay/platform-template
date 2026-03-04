@@ -2,155 +2,113 @@ import Link from 'next/link';
 
 const highlights = [
   {
-    title: 'Connected TV for Africa',
-    copy: 'Deliver measurement-ready campaigns with real-time data, offline-first delivery, and transparent pricing modeled after the live platform.',
+    title: 'Token-first brand system',
+    copy: 'Tailwind v4 theme tokens and reusable component classes keep product surfaces consistent.',
   },
   {
-    title: 'Consistent tokens',
-    copy: 'Shared colors, spacing, typography, and animations keep every experience aligned with the same design system.',
+    title: 'DDD package workflow',
+    copy: 'Feature modules own contracts, validation, and behavior while app routes stay intentionally thin.',
   },
   {
-    title: 'Built for scale',
-    copy: 'Turborepo caches, parallel pipelines, and a single Tailwind preset make it easy for every team to ship confidently.',
+    title: 'Edge-ready API starter',
+    copy: 'Cloudflare Hono worker includes typed health and tenant-aware summary endpoints out of the box.',
   },
 ];
 
 const stats = [
-  { label: 'Markets', value: '12' },
-  { label: 'Media owners', value: '4,320' },
-  { label: 'Campaigns', value: '2,100+' },
+  { label: 'Starter apps', value: '3' },
+  { label: 'Shared packages', value: '6+' },
+  { label: 'Baseline checks', value: 'Lint + Type + Test' },
 ];
 
-const plans = [
-  { title: 'Launch', description: 'Perfect for new pilots and internal testing.', price: 'Starter' },
-  { title: 'Scale', description: 'Deploy across teams with shared tokens and automated pipelines.', price: 'Growth' },
-  { title: 'Enterprise', description: 'Run global programs, governance, and advanced analytics.', price: 'Pro' },
-];
-
-const resources = [
-  { title: 'Platform architecture guide', copy: 'Learn how the marketing + app shell share tokens and layout.', href: '#resources' },
-  { title: 'UX responsive checklist', copy: 'Mobile-first nav, sidebar, and theme controls ready for your SaaS.', href: '#resources' },
-  { title: 'Brand system notes', copy: 'Use the shared Tailwind preset, typography, and colors everywhere.', href: '#resources' },
+const guides = [
+  {
+    title: 'Architecture boundaries',
+    copy: 'Package ownership, dependency direction, and app shell responsibilities.',
+  },
+  {
+    title: 'Feature package checklist',
+    copy: 'Create and expose typed contracts before wiring route-level composition.',
+  },
+  {
+    title: 'API starter conventions',
+    copy: 'Typed route validation, edge bindings, and smoke tests for core endpoints.',
+  },
 ];
 
 export default function MarketingHome() {
   return (
-    <>
-      <section
-        id="product"
-        className="rounded-[2rem] border border-border bg-card/60 p-8 shadow-card backdrop-blur"
-      >
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-4 max-w-3xl">
-            <p className="text-xs uppercase tracking-[0.5em] text-muted-foreground">Brand System</p>
-            <h1 className="text-4xl font-semibold leading-tight text-foreground md:text-5xl">
-              Marketing + app shell for modern SaaS teams
+    <div className="space-y-6 pb-12 sm:space-y-8 md:space-y-10">
+      <section id="product" className="brand-container brand-section">
+        <div className="shell-panel grid gap-7 rounded-3xl p-7 shadow-premium md:grid-cols-[1.2fr_0.8fr] md:p-10">
+          <div className="space-y-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Platform Baseline</p>
+            <h1 className="font-display text-4xl font-bold tracking-tight text-text-primary md:text-5xl">
+              Production-ready starter for your next product
             </h1>
-            <p className="text-base leading-relaxed text-muted-foreground">
-              This Turborepo-ready template ships with the marketing hero, authenticated shell, and theme
-              utilities used across the flagship platform. Build fast without rewriting the styling stack.
+            <p className="max-w-2xl text-base leading-relaxed text-text-secondary">
+              Build new products from a tested monorepo base with reusable feature packages, consistent styling tokens,
+              and a Cloudflare API starter already wired for typed contracts.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link
-                href="/dashboard"
-                className="rounded-full bg-foreground px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-background transition hover:bg-foreground/90"
-              >
-                Launch the dashboard
+              <Link href="/dashboard" className="brand-button">
+                Open dashboard starter
               </Link>
-              <Link
-                href="#resources"
-                className="rounded-full border border-border px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-foreground transition hover:border-foreground"
-              >
-                View docs
+              <Link href="/docs" className="brand-button-secondary">
+                Read implementation playbook
               </Link>
             </div>
           </div>
-          <div className="grid flex-1 grid-cols-3 gap-4">
-            {stats.map((stat) => (
-              <article
-                key={stat.label}
-                className="rounded-2xl border border-border bg-background/40 p-4 text-center shadow-dropdown"
-              >
-                <p className="text-3xl font-semibold text-foreground">{stat.value}</p>
-                <p className="text-[0.6rem] uppercase tracking-[0.4em] text-muted-foreground">
-                  {stat.label}
-                </p>
+
+          <div className="grid gap-3 sm:grid-cols-3 md:grid-cols-1">
+            {stats.map((item) => (
+              <article key={item.label} className="surface-card p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-text-secondary">{item.label}</p>
+                <p className="mt-2 text-2xl font-semibold text-text-primary">{item.value}</p>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section
-        id="solutions"
-        className="grid gap-6 md:grid-cols-3"
-      >
+      <section id="solutions" className="brand-container grid gap-4 md:grid-cols-3">
         {highlights.map((item) => (
-          <article
-            key={item.title}
-            className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-6 shadow-dropdown transition hover:-translate-y-0.5 hover:shadow-card"
-          >
-            <h2 className="text-xl font-semibold text-foreground">{item.title}</h2>
-            <p className="text-sm leading-relaxed text-muted-foreground">{item.copy}</p>
+          <article key={item.title} className="card-interactive">
+            <h2 className="text-lg font-semibold text-text-primary">{item.title}</h2>
+            <p className="mt-2 text-sm leading-relaxed text-text-secondary">{item.copy}</p>
           </article>
         ))}
       </section>
 
-      <section
-        id="pricing"
-        className="rounded-[2rem] border border-border bg-gradient-to-r from-primary/20 to-accent/20 p-8 shadow-card backdrop-blur"
-      >
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl space-y-2">
-            <p className="text-xs uppercase tracking-[0.5em] text-muted-foreground">Pricing</p>
-            <h2 className="text-3xl font-semibold text-foreground">Pick the plan that matches your SaaS ship lane</h2>
-            <p className="text-sm text-muted-foreground">
-              Each tier reuses the marketing header/footer plus authenticated shell with responsive sidebar and
-              header controls.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/dashboard"
-              className="rounded-full border border-border px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-foreground transition hover:border-foreground"
-            >
-              Get pricing
+      <section id="pricing" className="brand-container">
+        <div className="rounded-3xl border border-primary/20 bg-gradient-to-r from-primary/18 via-primary/8 to-surface p-7 shadow-card md:p-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Execution model</p>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-text-primary md:text-4xl">
+            Start lean, scale through packages
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm text-text-secondary">
+            New product work starts in feature packages and routes compose those contracts. You keep reusability high
+            while avoiding app-specific duplication.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/docs" className="btn-outline">
+              See package conventions
             </Link>
-            <Link
-              href="#resources"
-              className="rounded-full bg-foreground px-5 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-background transition hover:bg-foreground/90"
-            >
-              Talk to sales
+            <Link href="/dashboard" className="btn-primary">
+              Launch starter routes
             </Link>
           </div>
-        </div>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {plans.map((plan) => (
-            <article key={plan.title} className="rounded-2xl bg-background/70 p-5 shadow-card">
-              <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">{plan.price}</p>
-              <h3 className="mt-2 text-lg font-semibold text-foreground">{plan.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{plan.description}</p>
-            </article>
-          ))}
         </div>
       </section>
 
-      <section
-        id="resources"
-        className="grid gap-6 md:grid-cols-3"
-      >
-        {resources.map((item) => (
-          <article
-            key={item.title}
-            className="flex flex-col gap-2 rounded-2xl border border-border bg-card p-6 shadow-dropdown"
-          >
-            <Link href={item.href} className="text-sm font-semibold text-foreground">
-              {item.title}
-            </Link>
-            <p className="text-sm text-muted-foreground">{item.copy}</p>
+      <section id="resources" className="brand-container grid gap-4 md:grid-cols-3">
+        {guides.map((guide) => (
+          <article key={guide.title} className="surface-card">
+            <h3 className="text-base font-semibold text-text-primary">{guide.title}</h3>
+            <p className="mt-2 text-sm text-text-secondary">{guide.copy}</p>
           </article>
         ))}
       </section>
-    </>
+    </div>
   );
 }

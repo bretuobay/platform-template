@@ -1,46 +1,29 @@
 # Platform Brand Package
 
-Shared design tokens, Tailwind preset, and theme utilities that keep every app visually aligned with the Connected TV branding.
+Shared brand tokens, Tailwind v4 utility classes, and theme primitives used by template apps.
 
-## Installation
+## What It Provides
+
+- Token-first color, typography, spacing, and shadow primitives via CSS.
+- Reusable component utility classes for marketing and dashboard surfaces.
+- `ThemeProvider` and `ThemeToggle` wrappers based on `next-themes`.
+
+## Usage
+
+### 1. Install package
 
 ```bash
 npm install @repo/brand
 ```
 
-## Usage
-
-### Tailwind
-
-Extend the preset from your `tailwind.config.ts`:
-
-```ts
-import brandPreset from '@repo/brand/tailwind-preset';
-
-const config: Config = {
-  presets: [brandPreset],
-  content: [...],
-  darkMode: 'class',
-};
-
-export default config;
-```
-
-### Global styles
-
-Import the packaged CSS once in your `app/globals.css`:
+### 2. Import brand CSS in app globals
 
 ```css
-@import '@repo/brand/styles.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "@repo/brand/styles.css";
 ```
 
-### Theme provider
-
-Wrap your app with the bundled theme provider:
+### 3. Wrap app with theme provider
 
 ```tsx
 import { ThemeProvider } from '@repo/brand';
@@ -50,23 +33,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
 }
 ```
 
-### Theme toggle (optional)
+### 4. Use utility classes
 
-`ThemeToggle` is exported from the same entry point and relies on `next-themes` under the hood.
+Examples: `brand-button`, `brand-input`, `surface-card`, `card-base`, `btn-primary`, `badge-info`.
 
 ## Development
 
 ```bash
-npm run build   # compiles ESM/CJS bundles
-npm run lint    # runs eslint
+npm run build
+npm run lint
 npm run typecheck
-npm run test    # noop filler
+npm run test
 ```
-
-## Publishing
-
-1. `npm run build`
-2. Ensure a changeset exists (`npm run changeset` at repo root)
-3. `npm run publish --workspace=@repo/brand`
-
-The package ships both JS modules (`dist/`) and the shared CSS (`src/styles/globals.css`).

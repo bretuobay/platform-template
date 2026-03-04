@@ -1,51 +1,92 @@
-import { ThemeToggle } from '@repo/brand';
+import { Code } from '@repo/ui';
 
-const resources = [
-  { label: 'Tailwind preset', copy: 'Extend the shared config and keep spacing, colors, and animations aligned.' },
-  { label: 'Global CSS', copy: 'Import the packaged CSS once to get the CSS variables and base styles.' },
-  { label: 'Theme utilities', copy: 'Wrap with ThemeProvider and surface the ThemeToggle anywhere you need light/dark.' },
+const boundaries = [
+  'Apps orchestrate routing, layouts, and auth boundaries.',
+  'Feature packages own domain contracts, validation, and behavior.',
+  'Shared packages expose UI primitives, brand tokens, and core utilities.',
+  'API endpoints consume package contracts instead of duplicating schemas.',
+];
+
+const bootstrapChecklist = [
+  'Create a feature package under packages/feature-<domain>.',
+  'Define domain types and Zod validation contracts first.',
+  'Implement pure service functions before route-level integration.',
+  'Expose package APIs through index.ts and optional contracts subpath.',
+  'Compose feature exports inside apps/web route files.',
+  'Add API route validation and smoke tests for every new endpoint.',
+];
+
+const featureChecklist = [
+  'No app-specific business logic in route pages.',
+  'No deep imports outside documented package exports.',
+  'Typecheck and check-types both pass for touched workspaces.',
+  'At least one service unit test and one route smoke test are included.',
 ];
 
 export default function DocsHome() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex max-w-6xl flex-col gap-12 px-4 py-16 md:px-6">
-        <section className="flex flex-col gap-6 rounded-3xl border border-border bg-card/50 p-8 shadow-modal backdrop-blur">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground">Template docs</p>
-              <h1 className="mt-2 text-4xl font-display font-bold leading-tight text-foreground md:text-5xl">
-                Shared styling, documented
-              </h1>
-            </div>
-            <ThemeToggle />
-          </div>
-          <p className="text-base text-muted-foreground">
-            This docs site demonstrates the same tokens and Tailwind preset that power the flagship ads-management platform.
-            Install `@repo/brand`, import the CSS, and reuse the ThemeProvider to match the brand in every app.
-          </p>
-        </section>
+    <main className="brand-container brand-section space-y-8">
+      <section className="glass-card space-y-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Template playbook</p>
+        <h1 className="font-display text-4xl font-bold tracking-tight text-text-primary">Ship new products from a stable baseline</h1>
+        <p className="max-w-3xl text-sm leading-relaxed text-text-secondary">
+          This docs app describes the default architecture and workflow for the platform template: Web + Docs +
+          Cloudflare API, Tailwind v4 token-first styling, and package-first feature modules.
+        </p>
+      </section>
 
-        <section className="grid gap-6 md:grid-cols-3">
-          {resources.map((resource) => (
-            <article
-              key={resource.label}
-              className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-6 shadow-dropdown transition hover:-translate-y-0.5 hover:shadow-card"
-            >
-              <h2 className="text-lg font-semibold text-foreground">{resource.label}</h2>
-              <p className="text-sm leading-relaxed text-muted-foreground">{resource.copy}</p>
-            </article>
+      <section className="card-base space-y-4">
+        <h2 className="text-xl font-semibold text-text-primary">Architecture boundaries</h2>
+        <ul className="space-y-2 text-sm text-text-secondary">
+          {boundaries.map((item) => (
+            <li key={item} className="rounded-lg bg-neutral-100 px-3 py-2">
+              {item}
+            </li>
           ))}
-        </section>
+        </ul>
+      </section>
 
-        <section className="flex flex-col gap-4 rounded-2xl border border-border bg-gradient-to-r from-secondary/20 to-accent/20 p-6 text-sm text-muted-foreground">
-          <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">Publish flow</p>
+      <section className="grid gap-4 lg:grid-cols-2">
+        <article className="card-base space-y-4">
+          <h3 className="text-lg font-semibold text-text-primary">New product bootstrap checklist</h3>
+          <ol className="space-y-2 text-sm text-text-secondary">
+            {bootstrapChecklist.map((item, index) => (
+              <li key={item} className="rounded-lg bg-neutral-100 px-3 py-2">
+                {index + 1}. {item}
+              </li>
+            ))}
+          </ol>
+        </article>
+
+        <article className="card-base space-y-4">
+          <h3 className="text-lg font-semibold text-text-primary">New feature package checklist</h3>
+          <ul className="space-y-2 text-sm text-text-secondary">
+            {featureChecklist.map((item) => (
+              <li key={item} className="rounded-lg bg-neutral-100 px-3 py-2">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </article>
+      </section>
+
+      <section className="card-base space-y-4">
+        <h3 className="text-lg font-semibold text-text-primary">Common commands</h3>
+        <div className="grid gap-3 text-sm text-text-secondary">
           <p>
-            Run `npm run build` followed by the changeset workflow to publish `@repo/brand`. Then every app can update the
-            dependency and inherit the styling automatically.
+            <Code>npm run lint</Code>
           </p>
-        </section>
-      </div>
+          <p>
+            <Code>npm run typecheck</Code>
+          </p>
+          <p>
+            <Code>npm run check-types</Code>
+          </p>
+          <p>
+            <Code>npm run test</Code>
+          </p>
+        </div>
+      </section>
     </main>
   );
 }
