@@ -4,20 +4,12 @@ import { useEffect, useState } from 'react';
 
 const DEFAULT_HASH = '#overview';
 
-function getHash(defaultHash: string) {
-  if (typeof window === 'undefined') {
-    return defaultHash;
-  }
-
-  return window.location.hash || defaultHash;
-}
-
 export function useActiveHash(defaultHash = DEFAULT_HASH) {
-  const [hash, setHash] = useState(() => getHash(defaultHash));
+  const [hash, setHash] = useState(defaultHash);
 
   useEffect(() => {
     const syncHash = () => {
-      setHash(getHash(defaultHash));
+      setHash(window.location.hash || defaultHash);
     };
 
     syncHash();

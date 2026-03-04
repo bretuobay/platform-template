@@ -5,4 +5,5 @@
 @source "../components/**/*.{ts,tsx}";
 @source "../../../packages/ui/src/**/*.{ts,tsx}";
 @source "../../../packages/feature-dashboard/src/**/*.{ts,tsx}";
+@source "../../../packages/feature-auth/src/**/*.{ts,tsx}";
 @source "../../../packages/brand/src/**/*.{ts,tsx}";

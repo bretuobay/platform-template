@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@repo/brand": "*",
+    "@repo/feature-auth": "*",
     "@repo/feature-dashboard": "*",
     "@repo/ui": "*",
     "lucide-react": "^0.574.0",

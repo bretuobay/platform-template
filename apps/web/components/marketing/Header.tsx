@@ -75,11 +75,11 @@ export function MarketingHeader() {
 
         <div className="hidden items-center gap-4 md:flex">
           <ThemeToggle />
-          <Link href="/dashboard" className="text-sm font-bold text-text-primary transition-colors hover:text-primary">
+          <Link href="/login" className="text-sm font-bold text-text-primary transition-colors hover:text-primary">
             Sign in
           </Link>
-          <Link href="/dashboard" className="brand-button h-11 px-6 text-sm shadow-md">
-            Start project
+          <Link href="/signup" className="brand-button h-11 px-6 text-sm shadow-md">
+            Sign up
           </Link>
         </div>
 
@@ -122,14 +122,14 @@ export function MarketingHeader() {
               </a>
             ))}
             <Link
-              href="/dashboard"
+              href="/login"
               className="rounded-2xl px-5 py-4 text-lg font-bold text-text-primary hover:bg-primary/10 hover:text-primary"
               onClick={() => setOpen(false)}
             >
               Sign in
             </Link>
-            <Link href="/dashboard" className="brand-button h-14 w-full text-lg" onClick={() => setOpen(false)}>
-              Start project
+            <Link href="/signup" className="brand-button h-14 w-full text-lg" onClick={() => setOpen(false)}>
+              Sign up
             </Link>
           </nav>
         </div>

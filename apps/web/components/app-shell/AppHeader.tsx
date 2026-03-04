@@ -51,14 +51,10 @@ export function AppHeader({ onOpenSidebar, isSidebarOpen, sidebarId }: AppHeader
             <ThemeToggle />
           </div>
 
-          <button
-            type="button"
-            className="btn-secondary h-11 !rounded-xl px-3 sm:px-4"
-            aria-label="Sign out"
-          >
+          <Link href="/logout" className="btn-secondary h-11 !rounded-xl px-3 sm:px-4" aria-label="Sign out">
             <LogOut className="h-4 w-4" aria-hidden="true" />
             <span className="hidden sm:inline">Sign out</span>
-          </button>
+          </Link>
         </div>
       </div>
     </header>

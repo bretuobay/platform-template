@@ -42,13 +42,19 @@ export function ThemeToggle() {
 
   const isDark = resolvedTheme === 'dark';
   const nextTheme = isDark ? 'light' : 'dark';
+  const toggleButtonClassName = clsx(
+    'inline-flex h-11 w-11 min-h-11 min-w-11 items-center justify-center rounded-md border border-border bg-card p-0 text-muted-foreground',
+    'transition-all duration-200 hover:border-accent hover:text-foreground hover:bg-accent/10',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+    'active:scale-95',
+  );
 
   if (!mounted) {
     return (
       <button
         type="button"
         aria-label="Toggle color theme"
-        className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card p-1.5 text-muted-foreground transition-all duration-200 hover:border-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className={toggleButtonClassName}
         disabled
       >
         <span className="sr-only">Toggle color theme</span>
@@ -65,14 +71,9 @@ export function ThemeToggle() {
       onClick={() => setTheme(nextTheme)}
       aria-label={`Switch to ${themeLabel} mode`}
       aria-pressed={isDark}
-      className={clsx(
-        'inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card p-1.5 text-muted-foreground',
-        'transition-all duration-200 hover:border-accent hover:text-foreground hover:bg-accent/10',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-        'active:scale-95',
-      )}
+      className={toggleButtonClassName}
     >
-      <IconComponent className="h-4 w-4 text-current transition-transform duration-200" aria-hidden="true" />
+      <IconComponent className="h-5 w-5 text-current transition-transform duration-200" aria-hidden="true" />
       <span className="sr-only">
         Current theme: {resolvedTheme}. Click to switch to {themeLabel} mode.
       </span>
